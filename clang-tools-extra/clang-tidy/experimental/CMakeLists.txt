@@ -1,6 +1,7 @@
 set(LLVM_LINK_COMPONENTS support)
 
 add_clang_library(clangTidyExperimentalModule
+  DemoInsertBefore.cpp
   DemoStrlenToSize.cpp
   ExperimentalTidyModule.cpp
 

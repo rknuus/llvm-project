@@ -9,6 +9,7 @@
 #include "../ClangTidy.h"
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
+#include "DemoInsertBefore.h"
 #include "DemoStrlenToSize.h"
 
 using namespace clang::ast_matchers;
@@ -21,8 +22,10 @@ namespace experimental {
 class ExperimentalModule : public ClangTidyModule {
 public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
+    CheckFactories.registerCheck<DemoInsertBefore>(
+        "experimental-insert-before");
     CheckFactories.registerCheck<DemoStrlenToSize>(
-        "experimental");
+        "experimental-strlen-to-size");
   }
 };
 
