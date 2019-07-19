@@ -17,6 +17,7 @@ add_extra_unittest(ClangTidyTests
   OverlappingReplacementsTest.cpp
   UsingInserterTest.cpp
   ReadabilityModuleTest.cpp
+  ReplaceHeaderTest.cpp
   TransformerClangTidyCheckTest.cpp
   )
 
@@ -30,6 +31,7 @@ target_link_libraries(ClangTidyTests
   clangSerialization
   clangTidy
   clangTidyAndroidModule
+  clangTidyExperimentalModule
   clangTidyGoogleModule
   clangTidyLLVMModule
   clangTidyObjCModule
