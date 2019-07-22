@@ -9,7 +9,7 @@
 #include "../ClangTidy.h"
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
-#include "ReplaceHeader.h"
+#include "CppUnitToGTestMVP.h"
 
 using namespace clang::ast_matchers;
 
@@ -21,8 +21,8 @@ namespace experimental {
 class ExperimentalModule : public ClangTidyModule {
 public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
-    CheckFactories.registerCheck<ReplaceHeader>(
-        "experimental-cppunit-replace-header");
+    CheckFactories.registerCheck<CppUnitToGTestMVP>(
+        "experimental-cppunit-mvp");
   }
 };
 

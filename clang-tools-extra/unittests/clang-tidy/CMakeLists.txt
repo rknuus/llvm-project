@@ -17,7 +17,7 @@ add_extra_unittest(ClangTidyTests
   OverlappingReplacementsTest.cpp
   UsingInserterTest.cpp
   ReadabilityModuleTest.cpp
-  ReplaceHeaderTest.cpp
+  CppUnitToGTestMVPTest.cpp
   TransformerClangTidyCheckTest.cpp
   )
 

@@ -2,7 +2,7 @@ set(LLVM_LINK_COMPONENTS support)
 
 add_clang_library(clangTidyExperimentalModule
   ExperimentalTidyModule.cpp
-  ReplaceHeader.cpp
+  CppUnitToGTestMVP.cpp
 
   LINK_LIBS
   clangAST

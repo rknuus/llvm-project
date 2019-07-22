@@ -1,4 +1,4 @@
-//===---- ReplaceHeaderTest.cpp - clang-tidy -----------------------------===//
+//===---- CppUnitToGTestMVPTest.cpp - clang-tidy -----------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,7 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "../clang-tidy/experimental/ReplaceHeader.h"
+#include "../clang-tidy/experimental/CppUnitToGTestMVP.h"
 #include "../clang-tidy/utils/TransformerClangTidyCheck.h"
 #include "ClangTidyTest.h"
 #include "gtest/gtest.h"
@@ -16,8 +16,12 @@ namespace tidy {
 namespace experimental {
 namespace {
 
-TEST(ReplaceHeaderTest, Foo) {
-  EXPECT_EQ("", test::runCheckOnCode<ReplaceHeader>(""));
+TEST(CppUnitToGTestMVPTest, DropCppUnitTestClassDefinition) {
+  EXPECT_EQ(
+      "namespace CppUnit { class TestCase {}; }",
+    test::runCheckOnCode<CppUnitToGTestMVP>(
+      "namespace CppUnit { class TestCase {}; }"
+      "class ComplexNumberTest : public CppUnit::TestCase {};"));
 }
 
 } // namespace
