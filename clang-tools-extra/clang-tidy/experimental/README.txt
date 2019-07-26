@@ -4,7 +4,7 @@
 * `cd transformer-llvm`
 * `git checkout spike/try-simple-transformer-tidy-check`
 * `cd ../build-transformer`
-* `cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_USE_LINKER=gold -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DLLVM_PARALLEL_LINK_JOBS=1 -G Ninja ../transformer-llvm/llvm`
+* `cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_USE_LINKER=gold -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DLLVM_PARALLEL_LINK_JOBS=1 -G Ninja ../llvm-project/llvm`
 
 == Building & testing ==
 * `ninja`
@@ -18,6 +18,8 @@
 == CppUnit to GoogleTest conversion ==
 * removing CppUnit includes is easy enough, either manually or with the include-fixer
 * build an MVP converting a CppUnit test class with one test method containing one test assertion to corresponding GoogleTest based code
+* combine multiple transformations into a set of transformations
+* turn into a stand-alone tool
 
 == References
 * testing guide: https://llvm.org/docs/TestingGuide.html
