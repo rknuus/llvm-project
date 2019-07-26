@@ -18,9 +18,9 @@ namespace {
 
 TEST(CppUnitToGTestMVPTest, DropCppUnitTestClassDefinition) {
   EXPECT_EQ(
-      "namespace CppUnit { class TestCase {}; }",
+      "namespace CppUnit { class TestCase {}; }\n;",
     test::runCheckOnCode<CppUnitToGTestMVP>(
-      "namespace CppUnit { class TestCase {}; }"
+      "namespace CppUnit { class TestCase {}; }\n"
       "class ComplexNumberTest : public CppUnit::TestCase {};"));
 }
 

@@ -12,8 +12,16 @@ namespace clang {
 namespace tidy {
 namespace experimental {
 
+using namespace clang;
+using namespace tooling;
+using namespace ast_matchers;
+
 tooling::RewriteRule CppUnitToGTestMVP::replaceCppUnitClass() {
-  return tooling::RewriteRule{};
+  StringRef Testcase = "testcase";
+  auto R = makeRule(cxxRecordDecl(isDerivedFrom(hasName("TestCase")), hasDefinition()).bind(Testcase),
+                    remove(node(Testcase)),  // TODO(KNR): how to remove semicolon, as well?
+                    text("No need for test classes in GTest world"));
+  return R;
 }
 
 } // namespace experimental
