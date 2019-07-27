@@ -15,10 +15,27 @@ namespace clang {
 namespace tidy {
 namespace experimental {
 
-class CppUnitToGTestMVP : public utils::TransformerClangTidyCheck {
+// copied from https://github.com/ymand/llvm-project/commits/transformer
+class MultiTransformerTidy : public ClangTidyCheck  {
+ public:
+  MultiTransformerTidy(std::vector<tooling::RewriteRule> Rules, StringRef Name,
+                       ClangTidyContext *Context);
+
+  void registerMatchers(ast_matchers::MatchFinder *Finder) final;
+
+  // `check` will never be called, since all of the matchers are registered to
+  // child tidies.
+  void check(const ast_matchers::MatchFinder::MatchResult &Result) final {}
+
+ private:
+  // Use a deque to ensure pointer stability of elements.
+  std::deque<utils::TransformerClangTidyCheck> Tidies;
+};
+
+class CppUnitToGTestMVP : public MultiTransformerTidy {
  public:
   CppUnitToGTestMVP(StringRef Name, ClangTidyContext *Context)
-      : utils::TransformerClangTidyCheck(replaceCppUnitClass(), Name, Context) {}
+      : MultiTransformerTidy(std::vector<tooling::RewriteRule>{replaceCppUnitClass()}, Name, Context) {}
 
  private:
   tooling::RewriteRule replaceCppUnitClass();

@@ -16,6 +16,21 @@ using namespace clang;
 using namespace tooling;
 using namespace ast_matchers;
 
+MultiTransformerTidy::MultiTransformerTidy(
+    std::vector<tooling::RewriteRule> Rules, StringRef Name,
+    ClangTidyContext *Context)
+    : ClangTidyCheck(Name, Context) {
+  for (auto &R : Rules) {
+    Tidies.emplace_back(std::move(R), Name, Context);
+  }
+}
+
+void MultiTransformerTidy::registerMatchers(ast_matchers::MatchFinder *Finder) {
+  for (auto &T : Tidies) {
+    T.registerMatchers(Finder);
+  }
+}
+
 tooling::RewriteRule CppUnitToGTestMVP::replaceCppUnitClass() {
   StringRef Testcase = "testcase";
   auto R = makeRule(cxxRecordDecl(isDerivedFrom(hasName("TestCase")), hasDefinition()).bind(Testcase),
