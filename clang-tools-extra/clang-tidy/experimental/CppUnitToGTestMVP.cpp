@@ -7,6 +7,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "CppUnitToGTestMVP.h"
+#include "clang/Tooling/Refactoring/Stencil.h"
 
 namespace clang {
 namespace tidy {
@@ -32,12 +33,30 @@ void MultiTransformerTidy::registerMatchers(ast_matchers::MatchFinder *Finder) {
 }
 
 tooling::RewriteRule CppUnitToGTestMVP::replaceCppUnitClass() {
-  StringRef Testcase = "testcase";
-  auto R = makeRule(cxxRecordDecl(isDerivedFrom(hasName("TestCase")), hasDefinition()).bind(Testcase),
-                    remove(node(Testcase)),  // TODO(KNR): how to remove semicolon, as well?
+  StringRef Testclass = "testclass";
+  // TODO(KNR): not only remove definitions, also remove declarations
+  auto R = makeRule(cxxRecordDecl(isDerivedFrom(hasName("TestCase")), hasDefinition()).bind(Testclass),
+                    remove(node(Testclass)),  // TODO(KNR): how to remove semicolon, as well?
                     text("No need for test classes in GTest world"));
+  // TODO(KNR): apparently includes cannot be added stand-alone, so need to find a good place for it
+  // addInclude(R, "gtest/gtest.h", IncludeFormat::Angled);  // TODO(KNR): another crash...
   return R;
 }
+
+tooling::RewriteRule CppUnitToGTestMVP::convertTestMethod() {
+  StringRef Testclass = "testclass";
+  StringRef Testmethod = "testmethod";
+  auto R = makeRule(cxxMethodDecl(ofClass(cxxRecordDecl(isDerivedFrom(hasName("TestCase"))).bind(Testclass))).bind(Testmethod),
+                    insertAfter(node(Testclass), stencil::cat("TEST(", name(Testclass), ", ", name(Testmethod), ") {}")),
+                    text("Convert test method"));
+  return R;
+}
+
+// tooling::RewriteRule CppUnitToGTestMVP::addGtestHeader() {
+//   auto R = makeRule();
+//   addInclude(R, "gtest/gtest.h", IncludeFormat::Angled);
+//   return R;
+// }
 
 } // namespace experimental
 } // namespace tidy

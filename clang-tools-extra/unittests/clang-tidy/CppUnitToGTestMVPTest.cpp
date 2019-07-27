@@ -24,6 +24,25 @@ TEST(CppUnitToGTestMVPTest, DropCppUnitTestClassDefinition) {
       "class ComplexNumberTest : public CppUnit::TestCase {};"));
 }
 
+TEST(CppUnitToGTestMVPTest, ConvertTestClassMethodByGoogleTest) {
+  EXPECT_EQ(
+      "namespace CppUnit { class TestCase {}; }\n"
+      "TEST(ComplexNumberTest, runTest) {};\n",
+    test::runCheckOnCode<CppUnitToGTestMVP>(
+      "namespace CppUnit { class TestCase {}; }\n"
+      "class ComplexNumberTest : public CppUnit::TestCase {\n"
+      " public:\n"
+      "  void runTest() {}\n"
+      "};\n"));
+}
+
+TEST(CppUnitToGTestMVPTest, DISABLED_AddGtestHeaderInclude) {
+  EXPECT_EQ(
+      "#include <gtest/gtest.h>\n",
+    test::runCheckOnCode<CppUnitToGTestMVP>(
+      ""));
+}
+
 } // namespace
 } // namespace utils
 } // namespace tidy

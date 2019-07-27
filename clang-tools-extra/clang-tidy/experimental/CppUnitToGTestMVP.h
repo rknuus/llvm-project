@@ -35,10 +35,15 @@ class MultiTransformerTidy : public ClangTidyCheck  {
 class CppUnitToGTestMVP : public MultiTransformerTidy {
  public:
   CppUnitToGTestMVP(StringRef Name, ClangTidyContext *Context)
-      : MultiTransformerTidy(std::vector<tooling::RewriteRule>{replaceCppUnitClass()}, Name, Context) {}
+      : MultiTransformerTidy(std::vector<tooling::RewriteRule>{
+                                replaceCppUnitClass()
+                              , convertTestMethod()
+                             }, Name, Context) {}
 
  private:
   tooling::RewriteRule replaceCppUnitClass();
+  tooling::RewriteRule convertTestMethod();
+  // tooling::RewriteRule addGtestHeader();
 };
 
 } // namespace experimental
